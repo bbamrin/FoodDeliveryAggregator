@@ -1,6 +1,5 @@
 package com.example.fooddeliveryaggregator.main_screen.presenter
 
-import android.util.Log
 import com.example.fooddeliveryaggregator.core.contracts.BasePresenter
 import com.example.fooddeliveryaggregator.main_screen.business.IMainScreenInteractor
 import com.example.fooddeliveryaggregator.main_screen.model.ShopModel
@@ -21,8 +20,6 @@ class MainScreenPresenter @Inject constructor(
     }
 
     private fun processShopsData(shopList: List<ShopModel>) {
-
-        Log.d("keklol", "")
         view?.showShops(shopList)
     }
 

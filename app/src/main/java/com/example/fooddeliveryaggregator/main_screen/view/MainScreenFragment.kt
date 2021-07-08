@@ -1,7 +1,6 @@
 package com.example.fooddeliveryaggregator.main_screen.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,7 +60,6 @@ class MainScreenFragment: Fragment(R.layout.main_screen_fragment), IMainScreenVi
     }
 
     override fun onDestroy() {
-        Log.d("keklol", "ondestroy")
         presenter.onDestroy()
         super.onDestroy()
     }

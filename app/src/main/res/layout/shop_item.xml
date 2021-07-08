@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="300dp">
+    android:layout_height="wrap_content">
 
 
     <TextView
+        android:layout_marginLeft="8dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
         android:id="@+id/tvShopName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProductCard"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:backgroundTint="#D3D3D3">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProductCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
 
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
