@@ -1,5 +1,6 @@
 package com.example.fooddeliveryaggregator.di
 
+import com.example.fooddeliveryaggregator.main_screen.business.IMainScreenInteractor
 import com.example.fooddeliveryaggregator.main_screen.presenter.IMainScreenPresenter
 import com.example.fooddeliveryaggregator.main_screen.view.MainScreenFragment
 import com.example.fooddeliveryaggregator.main_screen_host.presenter.IMainScreenHostPresenter
@@ -17,6 +18,8 @@ interface MainComponent {
     fun searchPresenter(): ISearchPresenter
 
     fun mainScreenPresenter(): IMainScreenPresenter
+
+    fun mainScreenInteractor(): IMainScreenInteractor
 
     fun inject(fragment: MainScreenHostFragment)
 

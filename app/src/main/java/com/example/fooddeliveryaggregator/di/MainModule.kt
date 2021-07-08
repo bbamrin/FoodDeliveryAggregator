@@ -1,5 +1,7 @@
 package com.example.fooddeliveryaggregator.di
 
+import com.example.fooddeliveryaggregator.main_screen.business.IMainScreenInteractor
+import com.example.fooddeliveryaggregator.main_screen.business.MainScreenInteractor
 import com.example.fooddeliveryaggregator.main_screen.presenter.IMainScreenPresenter
 import com.example.fooddeliveryaggregator.main_screen.presenter.MainScreenPresenter
 import com.example.fooddeliveryaggregator.main_screen_host.presenter.IMainScreenHostPresenter
@@ -18,12 +20,14 @@ interface MainModule {
     fun bindsMainScreenHostPresenter(impl: MainScreenHostPresenter): IMainScreenHostPresenter
 
     @Binds
-    @MainScope
     fun bindsSearchPresenter(impl: SearchPresenter): ISearchPresenter
 
 
     @Binds
-    @MainScope
     fun bindsMainScreenPresenter(impl: MainScreenPresenter): IMainScreenPresenter
+
+    @Binds
+    @MainScope
+    fun bindsMainScreenInteractor(impl: MainScreenInteractor): IMainScreenInteractor
 
 }

@@ -1,8 +1,7 @@
 package com.example.fooddeliveryaggregator
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.example.fooddeliveryaggregator.core.extensions.addFragment
 import com.example.fooddeliveryaggregator.main_screen_host.view.MainScreenHostFragment
 
@@ -24,9 +23,9 @@ class MainActivity : AppCompatActivity() {
 
 
     //todo
-    //1) Добавить итем магазина в виде виджета + ресайклер с магазинами + подключить либу адаптер делегатов
+    //1) Создать модели продуктов и магазинов + добавить способ получения данных с сервера(подключить ретрофит + создать методы в интеракторе)
     //2) Добавить "репозиторий" для передачи геоданных и названия продукта на главный экран (скорее всего все будет передаваться тупо через интерактор)
-    //3) Создать модели продуктов и магазинов + добавить способ получения данных с сервера(подключить ретрофит + создать методы в интеракторе)
+    //3) Добавить итем магазина в виде виджета + ресайклер с магазинами + подключить либу адаптер делегатов
     //4) Сделать шиммеринг
     //5) Сделать подстановку адреса используя геолокацию
 

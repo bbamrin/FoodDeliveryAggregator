@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fooddeliveryaggregator.R
+import com.example.fooddeliveryaggregator.core.DiffItemCallback
 import com.example.fooddeliveryaggregator.databinding.MainScreenFragmentBinding
-import com.example.fooddeliveryaggregator.databinding.SearchFragmentBinding
 import com.example.fooddeliveryaggregator.di.ComponentManager
+import com.example.fooddeliveryaggregator.main_screen.delegates.shopDelegate
+import com.example.fooddeliveryaggregator.main_screen.model.IItemModel
+import com.example.fooddeliveryaggregator.main_screen.model.ShopModel
 import com.example.fooddeliveryaggregator.main_screen.presenter.IMainScreenPresenter
-import com.example.fooddeliveryaggregator.search.presenter.ISearchPresenter
-import com.example.fooddeliveryaggregator.search.view.SearchFragment
+import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
 import javax.inject.Inject
 
 class MainScreenFragment: Fragment(R.layout.main_screen_fragment), IMainScreenView {
@@ -27,6 +30,8 @@ class MainScreenFragment: Fragment(R.layout.main_screen_fragment), IMainScreenVi
 
     @Inject
     lateinit var presenter: IMainScreenPresenter
+
+    private lateinit var recyclerAdapter: AsyncListDifferDelegationAdapter<IItemModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +49,7 @@ class MainScreenFragment: Fragment(R.layout.main_screen_fragment), IMainScreenVi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Log.d("keklol", "here")
+        setupRecyclerView()
         presenter.bindView(this)
         presenter.onViewReady()
     }
@@ -57,7 +61,23 @@ class MainScreenFragment: Fragment(R.layout.main_screen_fragment), IMainScreenVi
     }
 
     override fun onDestroy() {
+        Log.d("keklol", "ondestroy")
         presenter.onDestroy()
         super.onDestroy()
+    }
+
+    private fun setupRecyclerView() {
+        recyclerAdapter = AsyncListDifferDelegationAdapter(
+            DiffItemCallback(),
+            shopDelegate()
+        )
+        binding.rvShops.apply {
+            adapter = recyclerAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    override fun showShops(shopList: List<ShopModel>) {
+        recyclerAdapter.items = shopList
     }
 }
