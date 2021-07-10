@@ -8,4 +8,5 @@ interface ISearchView: IBaseView {
     fun getAddress(latitude: Double, longitude: Double): List<Address>
     fun requestLastKnownLocation()
     fun setAddress(address: String?)
+    fun setSuggestions(suggestions: List<String>)
 }

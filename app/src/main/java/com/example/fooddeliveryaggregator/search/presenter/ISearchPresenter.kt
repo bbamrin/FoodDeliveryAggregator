@@ -9,5 +9,6 @@ interface ISearchPresenter : IBasePresenter<ISearchView> {
 
     fun onSearchButtonClicked(searchModel: SearchModel)
     fun onLocationGranted(location: Location?)
+    fun onGeolocationTextChanged(text: String)
 
 }

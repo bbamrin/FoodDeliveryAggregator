@@ -1,8 +1,7 @@
-package com.example.fooddeliveryaggregator.main_screen.model.api
+package com.example.fooddeliveryaggregator.search.model.api
 
 import com.squareup.moshi.Json
 
-//will delete later now using GSON
 data class ExchangePairs(
     @field:Json(name = "EUR") val EUR: Double,
     @field:Json(name = "USD") val USD: Double,

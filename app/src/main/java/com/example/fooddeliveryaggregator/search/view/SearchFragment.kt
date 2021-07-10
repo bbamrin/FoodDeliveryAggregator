@@ -9,8 +9,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.example.fooddeliveryaggregator.R
@@ -39,10 +41,18 @@ class SearchFragment: Fragment(R.layout.search_fragment), ISearchView {
 
     private lateinit var locationManager: LocationManager
 
-    private lateinit var locationListener: LocationListener
+    private val locationListener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {}
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+    }
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    private lateinit var autocompleteArrayAdapter: ArrayAdapter<String>
+
+    private val autocompleteTextList: List<String> = mutableListOf()
 
     @Inject
     lateinit var presenter: ISearchPresenter
@@ -63,40 +73,17 @@ class SearchFragment: Fragment(R.layout.search_fragment), ISearchView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                1
-            )
-        }
-        geocoder = Geocoder(requireContext(), Locale.getDefault())
-        locationManager =
-            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationListener = object : LocationListener {
-            override fun onLocationChanged(location: Location) {}
-            override fun onProviderEnabled(provider: String) {}
-            override fun onProviderDisabled(provider: String) {}
-            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-        }
-        locationManager.requestLocationUpdates(
-            LocationManager.NETWORK_PROVIDER,
-            0,
-            1000f,
-            locationListener
+        checkNavigationPermissions()
+        setUpLocationUtils()
+
+        autocompleteArrayAdapter = NoFilterArrayAdapter(
+            requireContext(),
+            R.layout.autocomplete_item,
+            autocompleteTextList
         )
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        presenter.bindView(this)
-        presenter.onViewReady()
+        binding.etGeolocationAutocomplete.setAdapter(autocompleteArrayAdapter)
+
+
         binding.btnSearch.setOnClickListener {
             presenter.onSearchButtonClicked(
                 SearchModel(
@@ -105,9 +92,21 @@ class SearchFragment: Fragment(R.layout.search_fragment), ISearchView {
                 )
             )
         }
+
         binding.etGeolocation.setEndIconOnClickListener {
             requestLastKnownLocation()
         }
+
+
+
+        binding.etGeolocationAutocomplete.doOnTextChanged { text, start, before, count ->
+            text?.let {
+                if (it.isNotEmpty()) presenter.onGeolocationTextChanged(text.toString())
+            }
+        }
+
+        presenter.bindView(this)
+        presenter.onViewReady()
     }
 
     override fun onDestroyView() {
@@ -156,5 +155,43 @@ class SearchFragment: Fragment(R.layout.search_fragment), ISearchView {
 
     override fun setAddress(address: String?) {
         binding.etGeolocation.editText?.setText(address)
+    }
+
+    override fun setSuggestions(suggestions: List<String>) {
+        autocompleteArrayAdapter.clear()
+        autocompleteArrayAdapter.addAll(suggestions)
+    }
+
+    private fun checkNavigationPermissions() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(), arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                1
+            )
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun setUpLocationUtils() {
+        geocoder = Geocoder(requireContext(), Locale.getDefault())
+        locationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        locationManager.requestLocationUpdates(
+            LocationManager.NETWORK_PROVIDER,
+            0,
+            1000f,
+            locationListener
+        )
     }
 }

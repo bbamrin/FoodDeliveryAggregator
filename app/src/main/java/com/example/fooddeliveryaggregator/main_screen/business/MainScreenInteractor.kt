@@ -3,6 +3,10 @@ package com.example.fooddeliveryaggregator.main_screen.business
 import com.example.fooddeliveryaggregator.main_screen.model.ProductModel
 import com.example.fooddeliveryaggregator.main_screen.model.SearchModel
 import com.example.fooddeliveryaggregator.main_screen.model.ShopModel
+import com.example.fooddeliveryaggregator.search.model.SuggestionRequestBody
+import com.example.fooddeliveryaggregator.search.model.SuggestionResponseList
+import com.example.fooddeliveryaggregator.search.model.api.AddressSuggestionService
+import com.example.fooddeliveryaggregator.search.model.api.createAddressSuggestionService
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
@@ -13,6 +17,12 @@ class MainScreenInteractor @Inject constructor() : IMainScreenInteractor {
     //Можно было бы сделать репозиторий и работать с ним через интерактор, но сейчас мне лень + мало времени :)
 
     private lateinit var searchModel: SearchModel
+
+    //Перенести в репозиторий при рефакторинге
+    private var addressSuggestionService: AddressSuggestionService =
+        createAddressSuggestionService()
+
+    var test = "1"
 
     override fun setSearchInfo(searchModel: SearchModel) {
         this.searchModel = searchModel
@@ -61,5 +71,9 @@ class MainScreenInteractor @Inject constructor() : IMainScreenInteractor {
                 )
             )
         )
+
+    override fun getGeolocationSuggestions(requestBody: SuggestionRequestBody): Single<SuggestionResponseList> {
+        return addressSuggestionService.getSuggestionsList(requestBody)
+    }
 
 }

@@ -20,13 +20,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="16dp"
-            app:endIconMode="password_toggle"
-            app:endIconCheckable="true"
             app:endIconDrawable="@drawable/ic_location_pointer"
             android:background="#00000000"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
+                android:id="@+id/etGeolocationAutocomplete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
